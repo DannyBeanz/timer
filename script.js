@@ -1,22 +1,25 @@
-// Variables for tracking the timer, roles, and costs
-let timerInterval;
-let startTime;
-let isTimerRunning = false;
-
-// Elements
+// JavaScript to implement the Meeting Cost Calculator with adjustable start time
 const startBtn = document.getElementById('start-btn');
 const stopBtn = document.getElementById('stop-btn');
 const resetBtn = document.getElementById('reset-btn');
+const addHourBtn = document.getElementById('add-hour-btn');
+const addMinuteBtn = document.getElementById('add-minute-btn');
 const timerDisplay = document.getElementById('timer-display');
 const totalCostDisplay = document.getElementById('total-cost-display');
 const roleCostsDisplay = document.getElementById('role-costs');
+
+let timerInterval;
+let startTime;
+let elapsedTime = 0;
+let isTimerRunning = false;
+let roles = [];
 
 // Start the timer
 startBtn.addEventListener('click', () => {
   if (isTimerRunning) return;
 
   // Collect all roles with their hourly rates and counts
-  const roles = Array.from(document.querySelectorAll('.count')).map(input => {
+  roles = Array.from(document.querySelectorAll('.count')).map(input => {
     const rate = parseFloat(input.dataset.rate);
     const count = parseInt(input.value) || 0;
     const role = input.dataset.role;
@@ -31,10 +34,9 @@ startBtn.addEventListener('click', () => {
 
   // Initialize timer
   isTimerRunning = true;
-  startTime = Date.now();
-  timerInterval = setInterval(() => updateTimerAndCost(roles), 1000);
+  startTime = Date.now() - elapsedTime; // Account for previously added time
+  timerInterval = setInterval(updateTimerAndCost, 1000);
 
-  // Disable start button and enable stop/reset buttons
   startBtn.disabled = true;
   stopBtn.disabled = false;
   resetBtn.disabled = false;
@@ -44,6 +46,7 @@ startBtn.addEventListener('click', () => {
 stopBtn.addEventListener('click', () => {
   clearInterval(timerInterval);
   isTimerRunning = false;
+  elapsedTime = Date.now() - startTime; // Store elapsed time
   startBtn.disabled = false;
   stopBtn.disabled = true;
 });
@@ -52,32 +55,46 @@ stopBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', () => {
   clearInterval(timerInterval);
   isTimerRunning = false;
+  elapsedTime = 0;
   startTime = null;
-  timerDisplay.textContent = "00:00:00";
+  updateTimerDisplay(0);
   roleCostsDisplay.innerHTML = "";
-  totalCostDisplay.textContent = "Total Cost: $0.00";
+  totalCostDisplay.textContent = "Total Cost: £0.00";
 
   startBtn.disabled = false;
   stopBtn.disabled = true;
   resetBtn.disabled = true;
 });
 
-// Function to update timer display and cumulative costs
-function updateTimerAndCost(roles) {
-  const elapsedTime = Date.now() - startTime;
+// Add one hour to the timer
+addHourBtn.addEventListener('click', () => {
+  adjustElapsedTime(3600); // 1 hour in seconds
+});
 
-  // Format time to HH:MM:SS
-  const hours = Math.floor((elapsedTime / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((elapsedTime / (1000 * 60)) % 60);
-  const seconds = Math.floor((elapsedTime / 1000) % 60);
-  timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+// Add one minute to the timer
+addMinuteBtn.addEventListener('click', () => {
+  adjustElapsedTime(60); // 1 minute in seconds
+});
+
+// Adjust elapsed time and update display
+function adjustElapsedTime(secondsToAdd) {
+  elapsedTime += secondsToAdd * 1000; // Convert to milliseconds for consistency
+  if (isTimerRunning) {
+    startTime = Date.now() - elapsedTime; // Recalculate startTime to keep timer smooth
+  }
+  updateTimerAndCost();
+}
+
+// Update timer display and cumulative costs
+function updateTimerAndCost() {
+  const currentTime = isTimerRunning ? Date.now() - startTime : elapsedTime;
+  updateTimerDisplay(currentTime);
 
   // Calculate cumulative cost for each role and the grand total
-  const elapsedHours = elapsedTime / (1000 * 60 * 60);
+  const elapsedHours = currentTime / (1000 * 60 * 60);
   let grandTotalCost = 0;
 
   roles.forEach(role => {
-    // Calculate cumulative cost for the role
     role.cumulativeCost = role.rate * role.count * elapsedHours;
     grandTotalCost += role.cumulativeCost;
   });
@@ -92,4 +109,12 @@ function updateTimerAndCost(roles) {
 
   // Display grand total
   totalCostDisplay.textContent = `Total Cost: £${grandTotalCost.toFixed(2)}`;
+}
+
+// Helper function to format and display time
+function updateTimerDisplay(currentTime) {
+  const hours = Math.floor((currentTime / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((currentTime / (1000 * 60)) % 60);
+  const seconds = Math.floor((currentTime / 1000) % 60);
+  timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
