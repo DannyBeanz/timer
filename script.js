@@ -85,13 +85,13 @@ function updateTimerAndCost(roles) {
   // Display cumulative cost for each role
   roleCostsDisplay.innerHTML = roles.map(role => `
     <div class="role-cost">
-      <span>${role.role}:</span>
-      <span>$${role.cumulativeCost.toFixed(2)}</span>
+      <span>£{role.role}:</span>
+      <span>£${role.cumulativeCost.toFixed(2)}</span>
     </div>
   `).join('');
 
   // Display grand total
-  totalCostDisplay.textContent = `Total Cost: $${grandTotalCost.toFixed(2)}`;
+  totalCostDisplay.textContent = `Total Cost: £${grandTotalCost.toFixed(2)}`;
 }
 
 // Feedback Button
