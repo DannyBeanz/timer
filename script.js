@@ -85,7 +85,7 @@ function updateTimerAndCost(roles) {
   // Display cumulative cost for each role
   roleCostsDisplay.innerHTML = roles.map(role => `
     <div class="role-cost">
-      <span>£{role.role}:</span>
+      <span>${role.role}:</span>
       <span>£${role.cumulativeCost.toFixed(2)}</span>
     </div>
   `).join('');
@@ -93,14 +93,3 @@ function updateTimerAndCost(roles) {
   // Display grand total
   totalCostDisplay.textContent = `Total Cost: £${grandTotalCost.toFixed(2)}`;
 }
-
-// Feedback Button
-const feedbackBtn = document.getElementById('feedback-btn');
-feedbackBtn.addEventListener('click', () => {
-  const phoneNumber = '07771875836'; // Replace with Tommy's phone number
-  const feedbackMessage = 'Hi Tommy, I wanted to share some feedback with you!';
-  const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(feedbackMessage)}`;
-
-  // Open WhatsApp with the message
-  window.open(whatsappURL, '_blank');
-});
