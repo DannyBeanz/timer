@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Cost Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <h1>Meeting Cost Calculator</h1>
+
+  <!-- Role Selection -->
+  <div id="roles-container">
+    <div class="role">
+      <label>Partners</label>
+      <input type="number" class="count" data-role="Partner" data-rate="407.50" placeholder="# of Partners" min="0">
+    </div>
+    <div class="role">
+      <label>Senior Directors</label>
+      <input type="number" class="count" data-role="Senior Director" data-rate="240.70" placeholder="# of Senior Directors" min="0">
+    </div>
+    <div class="role">
+      <label>Directors</label>
+      <input type="number" class="count" data-role="Director" data-rate="141.84" placeholder="# of Directors" min="0">
+    </div>
+    <div class="role">
+      <label>Senior Managers</label>
+      <input type="number" class="count" data-role="Senior Manager" data-rate="112.69" placeholder="# of Senior Managers" min="0">
+    </div>
+    <div class="role">
+      <label>Managers</label>
+      <input type="number" class="count" data-role="Manager" data-rate="78.46" placeholder="# of Managers" min="0">
+    </div>
+    <div class="role">
+      <label>Senior Consultants</label>
+      <input type="number" class="count" data-role="Senior Consultant" data-rate="46.79" placeholder="# of Senior Consultants" min="0">
+    </div>
+    <div class="role">
+      <label>Consultants</label>
+      <input type="number" class="count" data-role="Consultant" data-rate="37.89" placeholder="# of Consultants" min="0">
+    </div>
+    <div class="role">
+      <label>Analysts</label>
+      <input type="number" class="count" data-role="Analyst" data-rate="34.95" placeholder="# of Analysts" min="0">
+    </div>
+  </div>
+
+  <!-- Timer Controls -->
+  <div class="timer-controls">
+    <button id="start-btn">Start</button>
+    <button id="stop-btn" disabled>Stop</button>
+    <button id="reset-btn" disabled>Reset</button>
+  </div>
+
+  <!-- Timer and Cost Display -->
+  <div id="timer-display">00:00:00</div>
+  
+  <!-- Cost breakdown for each role -->
+  <div id="role-costs"></div>
+
+  <!-- Grand Total Display -->
+  <div id="total-cost-display">Total Cost: $0.00</div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
